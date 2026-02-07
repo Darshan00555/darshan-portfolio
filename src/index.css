@@ -1,0 +1,48 @@
+:root {
+  --font-primary: 'Oswald', sans-serif;
+  --font-secondary: 'Inter', sans-serif;
+  
+  --color-bg: #f8f8f8;
+  --color-text: #1a1a1a;
+  --color-accent: #b91c1c; /* Cherry Red */
+  --color-gray: #6b7280;
+  
+  font-family: var(--font-secondary);
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: var(--color-text);
+  background-color: var(--color-bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+section {
+  padding: 4rem 2rem;
+  min-height: 50vh;
+}
