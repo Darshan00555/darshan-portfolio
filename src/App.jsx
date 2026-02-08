@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 
 import About from './components/About';
+import PortfolioFooter from './components/Footer';
 import { NavBarDemo } from './components/NavBarDemo';
 // Direct import
 import { InfiniteLoopSlider } from './components/ui/InfiniteLoopSlider';
@@ -10,7 +11,6 @@ import Home from './pages/Home';
 // Lazy load other non-critical sections
 const Projects = lazy(() => import('./components/Projects'));
 const Resume = lazy(() => import('./components/Resume'));
-const Footer = lazy(() => import('./components/Footer'));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -49,8 +49,9 @@ function App() {
         <div id="Resume">
           <Resume />
         </div>
-        <Footer />
       </Suspense>
+
+      <PortfolioFooter />
     </>
   );
 }
