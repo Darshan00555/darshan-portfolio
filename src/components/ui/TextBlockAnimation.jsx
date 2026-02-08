@@ -18,8 +18,8 @@ export default function TextBlockAnimation({
   animateOnScroll = true,
   delay = 0, // Delay provided by props, careful not to let this act as a pre-scroll delay
   blockColor = '#000',
-  stagger = 0.1,
-  duration = 0.6,
+  stagger = 0.07, // Reduced from 0.1 for tighter, faster animation
+  duration = 0.5, // Reduced from 0.6 for snappier feel
   className,
 }) {
   const containerRef = useRef(null);
@@ -37,9 +37,8 @@ export default function TextBlockAnimation({
         scrollTrigger: animateOnScroll
           ? {
               trigger: containerRef.current,
-              // Trigger when the TOP of the element hits 60% down the viewport.
-              // This ensures the element is well within the screen (past the middle) before triggering.
-              start: 'top 60%',
+              // Trigger earlier (70% instead of 60%) for smoother experience
+              start: 'top 70%',
               // play: when entering
               // reverse: when leaving (scrolling past it down? no, 'leave' means passing the 'end' point)
               // But here 'end' defaults to bottom of viewport usually.
@@ -51,21 +50,21 @@ export default function TextBlockAnimation({
         delay: delay,
       });
 
-      // 4. Build the Animation Sequence (Linear for stability)
+      // 4. Build the Animation Sequence (Optimized for speed)
       tl.to(blocks, {
         scaleX: 1,
-        duration: duration,
-        stagger: stagger,
+        duration: duration * 0.75, // 25% faster
+        stagger: stagger * 0.5, // Tighter stagger to prevent last-line delay
         transformOrigin: 'left center',
-        ease: 'power3.inOut',
+        ease: 'power2.out', // Smoother, faster ease
       })
         .set(lines, { opacity: 1 }) // Reveal text while hidden
         .to(blocks, {
           scaleX: 0,
-          duration: duration,
-          stagger: stagger,
+          duration: duration * 0.65, // Even faster exit
+          stagger: stagger * 0.4, // Very tight exit stagger
           transformOrigin: 'right center',
-          ease: 'power3.inOut',
+          ease: 'power2.in', // Quick exit
         });
     },
     {

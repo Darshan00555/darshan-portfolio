@@ -46,14 +46,13 @@ const PROJECT_DATA = [
 ];
 
 const CONFIG = {
-  SCROLL_SPEED: 0.75,
-  LERP_FACTOR: 0.05,
+  SCROLL_SPEED: 1.2,
+  LERP_FACTOR: 0.08,
   BUFFER_SIZE: 5,
-  MAX_VELOCITY: 150,
-  SNAP_DURATION: 500,
+  MAX_VELOCITY: 200,
+  SNAP_DURATION: 600,
 };
 
-// Utility functions
 const lerp = (start, end, factor) => start + (end - start) * factor;
 
 const getProjectData = (index) => {
@@ -76,29 +75,26 @@ export function InfiniteLoopSlider() {
     max: CONFIG.BUFFER_SIZE,
   });
 
-  // Refs for state that changes frequently (animation loop)
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   const state = useRef({
     currentY: 0,
     targetY: 0,
     isDragging: false,
     isSnapping: false,
     snapStart: { time: 0, y: 0, target: 0 },
-    lastScrollTime: 0, // Will be set in useEffect
+    lastScrollTime: 0,
     dragStart: { y: 0, scrollY: 0 },
-    projectHeight: 0, // Will be set on mount
-    minimapHeight: 250, // Fixed height from CSS
+    projectHeight: 0,
+    minimapHeight: 250,
   });
 
-  // Refs to store DOM elements
   const projectsRef = useRef(new Map());
   const minimapRef = useRef(new Map());
   const infoRef = useRef(new Map());
   const requestRef = useRef();
-
-  // Container ref for scoped events
   const containerRef = useRef(null);
 
-  // Helper to update parallax for a single item
   const updateParallax = (img, scroll, index, height) => {
     if (!img) return;
 
@@ -107,12 +103,11 @@ export function InfiniteLoopSlider() {
     }
 
     let current = parseFloat(img.dataset.parallaxCurrent);
-    const target = (-scroll - index * height) * 0.2;
+    const target = (-scroll - index * height) * 0.15;
     current = lerp(current, target, 0.1);
 
-    // Optimization: only update if changed significantly
     if (Math.abs(current - target) > 0.01) {
-      img.style.transform = `translateY(${current}px) scale(1.5)`;
+      img.style.transform = `translateY(${current}px) scale(1.3)`;
       img.dataset.parallaxCurrent = current.toString();
     }
   };
@@ -141,7 +136,6 @@ export function InfiniteLoopSlider() {
     const s = state.current;
     const minimapY = (s.currentY * s.minimapHeight) / s.projectHeight;
 
-    // Update Projects
     projectsRef.current.forEach((el, index) => {
       const y = index * s.projectHeight + s.currentY;
       el.style.transform = `translateY(${y}px)`;
@@ -149,18 +143,15 @@ export function InfiniteLoopSlider() {
       updateParallax(img, s.currentY, index, s.projectHeight);
     });
 
-    // Update Minimap Images
     minimapRef.current.forEach((el, index) => {
       const y = index * s.minimapHeight + minimapY;
       el.style.transform = `translateY(${y}px)`;
       const img = el.querySelector('img');
       if (img) {
-        // Minimap parallax uses minimapHeight
         updateParallax(img, minimapY, index, s.minimapHeight);
       }
     });
 
-    // Update Info
     infoRef.current.forEach((el, index) => {
       const y = index * s.minimapHeight + minimapY;
       el.style.transform = `translateY(${y}px)`;
@@ -171,7 +162,7 @@ export function InfiniteLoopSlider() {
     const s = state.current;
     const now = Date.now();
 
-    if (!s.isSnapping && !s.isDragging && now - s.lastScrollTime > 100) {
+    if (!s.isSnapping && !s.isDragging && now - s.lastScrollTime > 150) {
       const snapPoint = -Math.round(-s.targetY / s.projectHeight) * s.projectHeight;
       if (Math.abs(s.targetY - snapPoint) > 1) snapToProject();
     }
@@ -182,6 +173,12 @@ export function InfiniteLoopSlider() {
     }
 
     updatePositions();
+
+    // Update current index for mobile display
+    const newIndex = Math.round(-s.currentY / s.projectHeight);
+    if (newIndex !== currentIndex) {
+      setCurrentIndex(newIndex);
+    }
   };
 
   const renderedRange = useRef({ min: -CONFIG.BUFFER_SIZE, max: CONFIG.BUFFER_SIZE });
@@ -191,14 +188,13 @@ export function InfiniteLoopSlider() {
 
     const s = state.current;
     if (s.projectHeight === 0) {
-      // Safety check
       requestRef.current = requestAnimationFrame(animationLoop);
       return;
     }
 
-    const currentIndex = Math.round(-s.targetY / s.projectHeight);
-    const min = currentIndex - CONFIG.BUFFER_SIZE;
-    const max = currentIndex + CONFIG.BUFFER_SIZE;
+    const currentIdx = Math.round(-s.targetY / s.projectHeight);
+    const min = currentIdx - CONFIG.BUFFER_SIZE;
+    const max = currentIdx + CONFIG.BUFFER_SIZE;
 
     if (min !== renderedRange.current.min || max !== renderedRange.current.max) {
       renderedRange.current = { min, max };
@@ -211,13 +207,29 @@ export function InfiniteLoopSlider() {
 
   useEffect(() => {
     state.current.projectHeight = window.innerHeight;
-    state.current.lastScrollTime = Date.now(); // Initialize here to avoid purity violation
+    state.current.lastScrollTime = Date.now();
 
-    // IMPORTANT: Scoped event listeners to the container to avoid hijacking global scroll
     const container = containerRef.current;
     if (!container) return;
 
+    let isInView = false;
+
+    // Intersection Observer to detect when slider is in viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isInView = entry.isIntersecting;
+        });
+      },
+      { threshold: 0.3 } // Activate when 30% visible
+    );
+
+    observer.observe(container);
+
     const onWheel = (e) => {
+      // Only hijack scroll when slider is in view
+      if (!isInView) return;
+
       e.preventDefault();
       const s = state.current;
       s.isSnapping = false;
@@ -240,8 +252,8 @@ export function InfiniteLoopSlider() {
     const onTouchMove = (e) => {
       const s = state.current;
       if (!s.isDragging) return;
-      // e.preventDefault(); // Optional: prevent page scroll while dragging this
-      s.targetY = s.dragStart.scrollY + (e.touches[0].clientY - s.dragStart.y) * 1.5;
+      e.preventDefault();
+      s.targetY = s.dragStart.scrollY + (e.touches[0].clientY - s.dragStart.y) * 2;
       s.lastScrollTime = Date.now();
     };
 
@@ -251,26 +263,20 @@ export function InfiniteLoopSlider() {
 
     const onResize = () => {
       state.current.projectHeight = window.innerHeight;
-      // Sync container height to match JS logic exactly (if needed)
-      // const container = document.querySelector('.parallax-container');
-      // if (container) {
-      //     container.style.height = `${window.innerHeight}px`;
-      // }
     };
 
+    // Use container for wheel events, not window
     container.addEventListener('wheel', onWheel, { passive: false });
-    container.addEventListener('touchstart', onTouchStart);
-    container.addEventListener('touchmove', onTouchMove);
+    container.addEventListener('touchstart', onTouchStart, { passive: false });
+    container.addEventListener('touchmove', onTouchMove, { passive: false });
     container.addEventListener('touchend', onTouchEnd);
     window.addEventListener('resize', onResize);
 
-    // Initial size sync
     onResize();
-
-    // Start Loop
     requestRef.current = requestAnimationFrame(animationLoop);
 
     return () => {
+      observer.disconnect();
       container.removeEventListener('wheel', onWheel);
       container.removeEventListener('touchstart', onTouchStart);
       container.removeEventListener('touchmove', onTouchMove);
@@ -278,13 +284,15 @@ export function InfiniteLoopSlider() {
       window.removeEventListener('resize', onResize);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, []);
+  }, [animationLoop]);
 
-  // Generate range of indices
   const indices = [];
   for (let i = visibleRange.min; i <= visibleRange.max; i++) {
     indices.push(i);
   }
+
+  const currentData = getProjectData(currentIndex);
+  const currentNum = getProjectNumber(currentIndex);
 
   return (
     <div className="parallax-container" ref={containerRef}>
@@ -300,17 +308,17 @@ export function InfiniteLoopSlider() {
                 else projectsRef.current.delete(i);
               }}
             >
-              <img src={data.image} alt={data.title} />
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40">
-                <h2 className="text-4xl font-bold tracking-widest text-white uppercase opacity-90 md:text-6xl">
-                  {data.title}
-                </h2>
+              <img src={data.image} alt={data.title} loading="lazy" />
+              <div className="project-title-overlay">
+                <h2 className="project-title-main">{data.title}</h2>
+                <p className="project-title-category">{data.category}</p>
               </div>
             </div>
           );
         })}
       </ul>
 
+      {/* Desktop Minimap */}
       <div className="minimap">
         <div className="minimap-wrapper">
           <div className="minimap-img-preview">
@@ -325,12 +333,12 @@ export function InfiniteLoopSlider() {
                     else minimapRef.current.delete(i);
                   }}
                 >
-                  <img src={data.image} alt={data.title} />
+                  <img src={data.image} alt={data.title} loading="lazy" />
                 </div>
               );
             })}
           </div>
-          <div className="minimap-info-list" style={{ overflow: 'hidden' }}>
+          <div className="minimap-info-list">
             {indices.map((i) => {
               const data = getProjectData(i);
               const num = getProjectNumber(i);
@@ -343,22 +351,34 @@ export function InfiniteLoopSlider() {
                     else infoRef.current.delete(i);
                   }}
                 >
-                  <div className="minimap-item-info-row">
-                    <p>{num}</p>
-                    <p>{data.title}</p>
+                  <div className="minimap-item-number">{num}</div>
+                  <div className="minimap-item-title">{data.title}</div>
+                  <div className="minimap-item-meta">
+                    <span>{data.category}</span>
+                    <span>{data.year}</span>
                   </div>
-                  <div className="minimap-item-info-row">
-                    <p>{data.category}</p>
-                    <p>{data.year}</p>
-                  </div>
-                  <div className="minimap-item-info-row">
-                    <p>{data.description}</p>
-                  </div>
+                  <div className="minimap-item-description">{data.description}</div>
                 </div>
               );
             })}
           </div>
         </div>
+      </div>
+
+      {/* Mobile Info Bar */}
+      <div className="mobile-info-bar">
+        <div className="mobile-info-number">{currentNum}</div>
+        <div className="mobile-info-meta">
+          <span className="mobile-info-category">{currentData.category}</span>
+          <span className="mobile-info-year">{currentData.year}</span>
+        </div>
+        <div className="mobile-info-description">{currentData.description}</div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="scroll-indicator">
+        <span className="scroll-indicator-text">Scroll</span>
+        <div className="scroll-indicator-icon"></div>
       </div>
     </div>
   );
