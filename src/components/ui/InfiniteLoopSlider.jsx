@@ -212,6 +212,11 @@ export function InfiniteLoopSlider() {
     const container = containerRef.current;
     if (!container) return;
 
+    // Detect mobile/tablet devices
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      window.innerWidth < 1024;
+
     let isInView = false;
 
     // Intersection Observer to detect when slider is in viewport
@@ -227,8 +232,9 @@ export function InfiniteLoopSlider() {
     observer.observe(container);
 
     const onWheel = (e) => {
-      // Only hijack scroll when slider is in view
-      if (!isInView) return;
+      // ONLY hijack scroll on DESKTOP when slider is in view
+      // On mobile, let normal page scrolling work
+      if (!isInView || isMobile) return;
 
       e.preventDefault();
       const s = state.current;
@@ -252,6 +258,13 @@ export function InfiniteLoopSlider() {
     const onTouchMove = (e) => {
       const s = state.current;
       if (!s.isDragging) return;
+
+      // On mobile, only prevent default if user is actively dragging within slider
+      // This allows vertical page scrolling when not actively interacting
+      if (isMobile && Math.abs(e.touches[0].clientY - s.dragStart.y) < 10) {
+        return; // Allow normal scroll if movement is minimal
+      }
+
       e.preventDefault();
       s.targetY = s.dragStart.scrollY + (e.touches[0].clientY - s.dragStart.y) * 2;
       s.lastScrollTime = Date.now();
