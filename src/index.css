@@ -35,6 +35,10 @@
   --font-secondary: 'Inter', sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
@@ -45,8 +49,6 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
 }
-
-
 
 a {
   text-decoration: none;

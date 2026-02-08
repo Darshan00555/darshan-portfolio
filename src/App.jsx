@@ -28,7 +28,9 @@ function App() {
   return (
     <>
       <NavBarDemo />
-      <Home />
+      <div id="Home">
+        <Home />
+      </div>
       <Suspense fallback={<div className="min-h-screen"></div>}>
         <div id="About">
           <About />
