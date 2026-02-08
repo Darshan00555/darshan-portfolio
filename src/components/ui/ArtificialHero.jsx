@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Briefcase, FileText, Home, Phone, User, Zap } from 'lucide-react';
 
-// standard gsap imports removed to use window.gsap from CDN
 import './ArtificialHero.css';
 
 export const ArtificialHero = () => {
@@ -15,15 +16,6 @@ export const ArtificialHero = () => {
   const timeRef = useRef(0);
 
   useEffect(() => {
-    // Access global GSAP objects
-    const gsap = window.gsap;
-    const ScrollTrigger = window.ScrollTrigger;
-
-    if (!gsap || !ScrollTrigger) {
-      console.error('GSAP not loaded');
-      return;
-    }
-
     gsap.registerPlugin(ScrollTrigger);
 
     const canvas = canvasRef.current;
