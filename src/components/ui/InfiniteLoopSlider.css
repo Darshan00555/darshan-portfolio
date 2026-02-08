@@ -1,0 +1,125 @@
+.parallax-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #000;
+  color: #fff;
+  /* Ensure it has a z-index context */
+  z-index: 10;
+}
+
+.project-list {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Will be overridden by JS, but good default */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.project img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+  will-change: transform;
+}
+
+/* Minimap Styles */
+.minimap {
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 50vh; /* Or adjust as needed */
+  pointer-events: none; /* Let clicks pass through if needed, or remove if interactive */
+  z-index: 20;
+  display: none; /* Hidden on mobile by default, shown on md+ */
+}
+
+@media (min-width: 768px) {
+  .minimap {
+    display: block;
+  }
+}
+
+.minimap-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Mask to fade out top/bottom */
+  mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+}
+
+.minimap-img-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 100%;
+}
+
+.minimap-img-item {
+  position: absolute;
+  width: 40px;
+  height: 50px; /* Aspect ratio roughly */
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.minimap-img-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minimap-info-list {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  width: calc(100% - 60px);
+  height: 100%;
+}
+
+.minimap-item-info {
+  position: absolute;
+  width: 100%;
+  height: auto;
+  /* Style text */
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.5rem 0;
+}
+
+.minimap-item-info-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.2rem;
+}
+
+.minimap-item-info p {
+  margin: 0;
+}

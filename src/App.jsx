@@ -1,14 +1,16 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 
+import About from './components/About';
 import { NavBarDemo } from './components/NavBarDemo';
+// Direct import
+import { InfiniteLoopSlider } from './components/ui/InfiniteLoopSlider';
 import KineticDotsLoader from './components/ui/KineticDotsLoader';
 import Home from './pages/Home';
 
-// Lazy load components
-const About = React.lazy(() => import('./components/About'));
-const Projects = React.lazy(() => import('./components/Projects'));
-const Resume = React.lazy(() => import('./components/Resume'));
-const Footer = React.lazy(() => import('./components/Footer'));
+// Lazy load other non-critical sections
+const Projects = lazy(() => import('./components/Projects'));
+const Resume = lazy(() => import('./components/Resume'));
+const Footer = lazy(() => import('./components/Footer'));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,10 +33,16 @@ function App() {
       <div id="Home">
         <Home />
       </div>
+
+      <div id="About">
+        <About />
+      </div>
+
+      <div id="Roles-Slider">
+        <InfiniteLoopSlider />
+      </div>
+
       <Suspense fallback={<div className="min-h-screen"></div>}>
-        <div id="About">
-          <About />
-        </div>
         <div id="Projects">
           <Projects />
         </div>

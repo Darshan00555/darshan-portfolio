@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function TextBlockAnimation({
   children,
   animateOnScroll = true,
-  delay = 0,
+  delay = 0, // Delay provided by props, careful not to let this act as a pre-scroll delay
   blockColor = '#000',
   stagger = 0.1,
   duration = 0.6,
@@ -33,57 +33,46 @@ export default function TextBlockAnimation({
 
       // 3. Create the Master Timeline
       const tl = gsap.timeline({
-        defaults: { ease: 'expo.inOut' },
+        defaults: { ease: 'power3.inOut' },
         scrollTrigger: animateOnScroll
           ? {
               trigger: containerRef.current,
-              start: 'top 70%', // Trigger when top of element hits 70% of viewport
-              toggleActions: 'play none none reverse',
+              // Trigger when the TOP of the element hits 60% down the viewport.
+              // This ensures the element is well within the screen (past the middle) before triggering.
+              start: 'top 60%',
+              // play: when entering
+              // reverse: when leaving (scrolling past it down? no, 'leave' means passing the 'end' point)
+              // But here 'end' defaults to bottom of viewport usually.
+              // 'play reverse play reverse' mapping:
+              // onEnter, onLeave, onEnterBack, onLeaveBack
+              toggleActions: 'play reverse play reverse',
             }
           : null,
         delay: delay,
       });
 
-      // 4. Build the Animation Sequence
-      // Step A: Scale Block 0 -> 1 (Left to Right)
+      // 4. Build the Animation Sequence (Linear for stability)
       tl.to(blocks, {
         scaleX: 1,
         duration: duration,
         stagger: stagger,
         transformOrigin: 'left center',
+        ease: 'power3.inOut',
       })
-        // Step B: Reveal Text (Instant)
-        .set(
-          lines,
-          {
-            opacity: 1,
-            stagger: stagger,
-          },
-          `<${duration / 2}`
-        )
-        // Step C: Scale Block 1 -> 0 (Left to Right)
-        .to(
-          blocks,
-          {
-            scaleX: 0,
-            duration: duration,
-            stagger: stagger,
-            transformOrigin: 'right center',
-          },
-          `<${duration * 0.4}`
-        );
+        .set(lines, { opacity: 1 }) // Reveal text while hidden
+        .to(blocks, {
+          scaleX: 0,
+          duration: duration,
+          stagger: stagger,
+          transformOrigin: 'right center',
+          ease: 'power3.inOut',
+        });
     },
     {
       scope: containerRef,
       dependencies: [animateOnScroll, delay, blockColor, stagger, duration],
     }
   );
-
-  // Helper to wrap children if they are strings, or valid elements
-  // We assume the user passes a list of <div>Line text</div> or similar
-  // OR we can verify if children is a string and wrap it.
-  // For simplicity with this strict animation requirement, we ask the user (or the consuming component)
-  // to pass "lines" as direct children divs.
 
   return (
     <div ref={containerRef} className={cn('relative', className)}>
