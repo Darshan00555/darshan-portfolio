@@ -37,7 +37,7 @@ export default function TextBlockAnimation({
         scrollTrigger: animateOnScroll
           ? {
               trigger: containerRef.current,
-              start: 'top 85%',
+              start: 'top 70%', // Trigger when top of element hits 70% of viewport
               toggleActions: 'play none none reverse',
             }
           : null,
