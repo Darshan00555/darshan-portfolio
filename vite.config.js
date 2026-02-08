@@ -11,4 +11,16 @@ export default defineConfig({
       '@': '/src',
     },
   },
+  base: '/', // Ensure base path is set correctly
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined, // Disable manual chunking to prevent 404s
+      },
+    },
+    // Ensure assets are inlined or properly referenced
+    assetsInlineLimit: 4096,
+  },
 });
