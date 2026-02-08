@@ -53,7 +53,7 @@
 .intro-text {
     font-family: var(--font-secondary);
     font-size: 1.1rem;
-    color: #333;
+    color: hsl(var(--foreground));
     line-height: 1.6;
     margin-bottom: 2rem;
     max-width: 450px;
@@ -61,14 +61,14 @@
 
 .highlight {
     font-weight: 600;
-    color: #000;
+    color: hsl(var(--primary));
 }
 
 .cta-btn {
     font-family: var(--font-primary);
     font-size: 1.2rem;
     font-weight: 700;
-    color: #000;
+    color: hsl(var(--foreground));
     text-transform: uppercase;
     display: inline-flex;
     align-items: center;
@@ -87,7 +87,7 @@
     font-family: var(--font-secondary);
     font-size: 1.2rem;
     margin-bottom: 0.8rem;
-    color: #000;
+    color: hsl(var(--foreground));
 }
 
 .muted {
@@ -131,7 +131,7 @@
 .tech-item {
     font-family: var(--font-secondary);
     font-size: 0.9rem;
-    color: #666;
+    color: hsl(var(--muted-foreground));
     display: flex;
     align-items: center;
     gap: 0.5rem;
