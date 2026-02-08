@@ -1,38 +1,71 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap');
 
 @keyframes grainMove {
-  0% { 
-    background-position: 0px 0px, 0px 0px, 0px 0px;
+  0% {
+    background-position:
+      0px 0px,
+      0px 0px,
+      0px 0px;
   }
-  10% { 
-    background-position: -5px -10px, 10px -15px, -10px 5px;
+  10% {
+    background-position:
+      -5px -10px,
+      10px -15px,
+      -10px 5px;
   }
-  20% { 
-    background-position: -10px 5px, -5px 10px, 15px -10px;
+  20% {
+    background-position:
+      -10px 5px,
+      -5px 10px,
+      15px -10px;
   }
-  30% { 
-    background-position: 15px -5px, -10px 5px, -5px 15px;
+  30% {
+    background-position:
+      15px -5px,
+      -10px 5px,
+      -5px 15px;
   }
-  40% { 
-    background-position: 5px 10px, 15px -10px, 10px -5px;
+  40% {
+    background-position:
+      5px 10px,
+      15px -10px,
+      10px -5px;
   }
-  50% { 
-    background-position: -15px 10px, 5px 15px, -10px -15px;
+  50% {
+    background-position:
+      -15px 10px,
+      5px 15px,
+      -10px -15px;
   }
-  60% { 
-    background-position: 10px -15px, -15px -5px, 15px 10px;
+  60% {
+    background-position:
+      10px -15px,
+      -15px -5px,
+      15px 10px;
   }
-  70% { 
-    background-position: -5px 15px, 10px -10px, -15px 5px;
+  70% {
+    background-position:
+      -5px 15px,
+      10px -10px,
+      -15px 5px;
   }
-  80% { 
-    background-position: 15px 5px, -5px -15px, 5px -10px;
+  80% {
+    background-position:
+      15px 5px,
+      -5px -15px,
+      5px -10px;
   }
-  90% { 
-    background-position: -10px -5px, 15px 10px, 10px 15px;
+  90% {
+    background-position:
+      -10px -5px,
+      15px 10px,
+      10px 15px;
   }
-  100% { 
-    background-position: 0px 0px, 0px 0px, 0px 0px;
+  100% {
+    background-position:
+      0px 0px,
+      0px 0px,
+      0px 0px;
   }
 }
 
@@ -48,7 +81,7 @@
 /* Text Element Styles */
 .hero-title-container {
   position: absolute;
-  bottom: 15%;
+  bottom: 25%; /* Moved up from 15% */
   left: 0;
   right: 0;
   z-index: 50;
@@ -89,14 +122,14 @@
 .hero-info-left {
   position: absolute;
   left: 2rem;
-  top: 40%;
+  top: 30%; /* Moved up from 40% */
   z-index: 50;
 }
 
 .hero-info-right {
   position: absolute;
   right: 2rem;
-  top: 40%;
+  top: 30%; /* Moved up from 40% */
   z-index: 50;
 }
 
@@ -133,8 +166,9 @@
     /* font-size removed as it's handled by children */
     bottom: 25%; /* Move up slightly */
   }
-  
-  .hero-word-primary, .hero-word-secondary {
+
+  .hero-word-primary,
+  .hero-word-secondary {
     font-size: clamp(3rem, 15vw, 6rem);
     line-height: 0.9;
   }
@@ -148,7 +182,7 @@
     top: 15%;
     left: 1.5rem;
   }
-  
+
   .hero-info-right {
     top: 15%;
     right: 1.5rem;
@@ -162,8 +196,15 @@
 }
 
 @keyframes textPulse {
-  0%, 100% { opacity: 0.8; -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8); }
-  50% { opacity: 0.4; -webkit-text-stroke: 2px rgba(255, 255, 255, 0.4); }
+  0%,
+  100% {
+    opacity: 0.8;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    opacity: 0.4;
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.4);
+  }
 }
 
 .hero-word-secondary {

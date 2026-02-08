@@ -236,7 +236,7 @@ export const ArtificialHero = () => {
       ctx.fillRect(0, 0, width, height);
 
       const centerX = width / 2;
-      const centerY = height / 2;
+      const centerY = height * 0.4; // Moved up to reduce gap with navbar
       const radius = Math.min(width, height) * 0.2;
 
       // Atmospheric background
