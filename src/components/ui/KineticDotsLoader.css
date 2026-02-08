@@ -1,0 +1,84 @@
+/* * 1. Gravity Bounce
+ * Simulates the object falling and jumping up.
+ * 0% = Ground (Hit)
+ * 50% = Peak Height (Slowest)
+ * 100% = Ground (Hit)
+ */
+@keyframes gravity-bounce {
+  0% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
+  } /* Hit ground, start jump fast */
+  50% {
+    transform: translateY(-40px);
+    animation-timing-function: cubic-bezier(0.32, 0, 0.67, 0);
+  } /* Hover at top, start fall slow */
+  100% {
+    transform: translateY(0);
+  } /* Hit ground */
+}
+
+/* * 2. Rubber Morph (Squash & Stretch)
+ * We decouple this from the translation to have finer control over the shape.
+ */
+@keyframes rubber-morph {
+  0% {
+    transform: scale(1.4, 0.6);
+  } /* Impact: Squashed flat */
+  5% {
+    transform: scale(0.9, 1.1);
+  } /* Rebound: Slight stretch */
+  15% {
+    transform: scale(1, 1);
+  } /* Normal shape rising */
+  50% {
+    transform: scale(1, 1);
+  } /* Peak: Perfect sphere */
+  85% {
+    transform: scale(0.9, 1.1);
+  } /* Falling: Stretch */
+  100% {
+    transform: scale(1.4, 0.6);
+  } /* Impact: Squashed flat */
+}
+
+/* * 3. Shadow Breathe
+ * Shadow shrinks and fades when object is high.
+ */
+@keyframes shadow-breathe {
+  0% {
+    transform: scale(1.4);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.1;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0.6;
+  }
+}
+
+/* * 4. Ripple Expand
+ * Only appears briefly at 0% and 100% when the ball hits.
+ */
+@keyframes ripple-expand {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+    border-width: 4px;
+  }
+  5% {
+    opacity: 0.8;
+  }
+  30% {
+    transform: scale(1.5);
+    opacity: 0;
+    border-width: 0px;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
