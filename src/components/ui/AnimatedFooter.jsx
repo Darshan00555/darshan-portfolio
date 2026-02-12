@@ -19,7 +19,6 @@ export const Footer = ({
   creatorUrl,
   // brandIcon,
   className,
-  theme = 'light',
 }) => {
   const footerRef = useRef(null);
   const brandTextRef = useRef(null);
@@ -189,7 +188,7 @@ export const Footer = ({
                       style={{ zIndex: 100, pointerEvents: 'auto' }}
                     >
                       <span
-                        className={`relative transition-colors duration-300 ${theme === 'dark' ? 'group-hover:text-white' : 'group-hover:text-black'}`}
+                        className={`relative transition-colors duration-300 group-hover:text-white`}
                       >
                         {link.label}
                       </span>
@@ -212,7 +211,7 @@ export const Footer = ({
                 href={creatorUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`cursor-pointer ${subtleTextColor} transition-all duration-300 ${theme === 'dark' ? 'hover:text-white' : 'hover:text-black'} hover:font-medium`}
+                className={`cursor-pointer ${subtleTextColor} transition-all duration-300 hover:font-medium hover:text-white`}
                 style={{ zIndex: 100, pointerEvents: 'auto' }}
               >
                 Crafted by {creatorName}
