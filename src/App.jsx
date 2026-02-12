@@ -1,52 +1,35 @@
-import { Suspense, lazy, useEffect, useState } from 'react';
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 import PortfolioFooter from './components/Footer';
-import { NavBarDemo } from './components/NavBarDemo';
-import KineticDotsLoader from './components/ui/KineticDotsLoader';
+// Removed BrowserRouter import
+import Navbar from './components/Navbar';
+import About from './pages/About';
+import Blog from './pages/Blog';
+import Contact from './pages/Contact';
 import Home from './pages/Home';
+import Projects from './pages/Projects';
+import Resume from './pages/Resume';
 
-// Lazy load other non-critical sections
-const Projects = lazy(() => import('./components/Projects'));
-const Resume = lazy(() => import('./components/Resume'));
+// Lazy loaded components for better performance
+// const Timeline = lazy(() => import('./components/Timeline'));
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [theme, setTheme] = useState('light'); // Default to light theme
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const toggleTheme = () => {
-    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
-  };
-
-  if (isLoading) {
-    return <KineticDotsLoader theme={theme} />;
-  }
-
   return (
-    <>
-      <NavBarDemo theme={theme} onThemeToggle={toggleTheme} />
-      <div id="Home">
-        <Home theme={theme} />
+    <div className="flex min-h-screen flex-col bg-zinc-950 font-sans text-white selection:bg-cyan-500/30">
+      <Navbar />
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/resume" element={<Resume />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
       </div>
-
-      <Suspense fallback={<div className="min-h-screen"></div>}>
-        <div id="Projects">
-          <Projects theme={theme} />
-        </div>
-        <div id="Resume">
-          <Resume theme={theme} />
-        </div>
-      </Suspense>
-
-      <PortfolioFooter theme={theme} />
-    </>
+      <PortfolioFooter />
+    </div>
   );
 }
 

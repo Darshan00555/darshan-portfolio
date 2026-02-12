@@ -1,16 +1,15 @@
-import '../components/ui/accordion-animations.css';
-import { LandingAccordionItem } from '../components/ui/interactive-image-accordion';
+import HeroSection from '../components/ui/glassmorphism-trust-hero';
 
 import React, { Suspense } from 'react';
 
 // Loading fallback
 const HeroFallback = () => (
-  <div className="flex h-screen w-screen items-center justify-center bg-white">
+  <div className="flex h-screen w-screen items-center justify-center bg-zinc-950">
     <div className="flex gap-3">
       {[...Array(3)].map((_, i) => (
         <div
           key={i}
-          className="h-3 w-3 animate-bounce rounded-full bg-black"
+          className="h-3 w-3 animate-bounce rounded-full bg-white"
           style={{ animationDelay: `${i * 0.15}s` }}
         />
       ))}
@@ -18,10 +17,10 @@ const HeroFallback = () => (
   </div>
 );
 
-const Home = ({ theme = 'light' }) => {
+const Home = () => {
   return (
     <Suspense fallback={<HeroFallback />}>
-      <LandingAccordionItem theme={theme} />
+      <HeroSection />
     </Suspense>
   );
 };

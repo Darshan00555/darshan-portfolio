@@ -43,9 +43,7 @@ export default function PortfolioFooter({ theme = 'light' }) {
       navLinks={navLinks}
       creatorName="Darshan Singh"
       creatorUrl="https://darshansingh.dev"
-      brandIcon={
-        <Code2 className="h-8 w-8 text-white drop-shadow-lg sm:h-10 sm:w-10 md:h-14 md:w-14" />
-      }
+      brandIcon={null}
       theme={theme}
     />
   );

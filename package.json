@@ -27,6 +27,7 @@
     "gsap": "^3.14.2",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.563.0",
+    "motion": "^12.34.0",
     "postprocessing": "^6.38.2",
     "radix-ui": "^1.4.3",
     "react": "^19.2.0",
