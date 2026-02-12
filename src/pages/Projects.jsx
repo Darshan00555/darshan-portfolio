@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
 
 const projects = [
