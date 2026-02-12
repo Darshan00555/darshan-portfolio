@@ -54,8 +54,8 @@ function Shape({ quality, theme }) {
     }
   });
 
-  const sphereDetail = quality === 'low' ? 24 : 48; // Reduced from 32/64
-  const innerSphereDetail = quality === 'low' ? 12 : 24; // Reduced from 16/32
+  const sphereDetail = quality === 'low' ? 32 : 48; // Increased for better quality
+  const innerSphereDetail = quality === 'low' ? 16 : 24; // Increased for better quality
 
   // Inverted colors: white box, black sphere
   const boxColor = theme === 'dark' ? '#000000' : '#ffffff';
@@ -145,16 +145,17 @@ function Scene({ quality, theme }) {
     <Canvas
       className="w-full h-full"
       camera={{ position: [5, 5, 5], fov: 50 }}
-      dpr={1} // Fixed to 1 for better performance
+      dpr={[1, 2]} // Adaptive DPR for sharp rendering on all devices
       performance={{ min: 0.5 }}
       gl={{ 
-        antialias: false, // Disabled for performance
-        powerPreference: 'high-performance'
+        antialias: true, // Enable for smooth edges
+        powerPreference: 'high-performance',
+        alpha: true
       }}
     >
       <Environment theme={theme} />
       <Shape quality={quality} theme={theme} />
-      {quality !== 'low' && (
+      {( // Enable effects on all devices for better quality
         <EffectComposer multisampling={0}>
           <N8AO 
             halfRes 
@@ -222,11 +223,20 @@ export const Hero = ({ title, description, theme = 'light' }) => {
   const descColor = theme === 'dark' ? 'text-white/50' : 'text-black/50';
 
   return (
-    <div className={`h-svh w-screen relative ${bgColor}`}>
+    <div className={`h-svh w-screen relative overflow-hidden ${bgColor}`}>
+      {/* Radial glow effect */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: theme === 'dark' 
+            ? 'radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 60%)'
+            : 'radial-gradient(circle at center, rgba(0,0,0,0.06) 0%, transparent 60%)'
+        }}
+      />
       <div className="absolute inset-0">
         {isLoaded && <Scene quality={quality} theme={theme} />}
       </div>
-      <div className="absolute bottom-4 left-4 md:bottom-10 md:left-10 z-20 max-w-md">
+      <div className="absolute bottom-16 sm:bottom-20 left-4 md:bottom-10 md:left-10 z-20 max-w-md px-2">
         <h1 className={`text-2xl md:text-3xl font-light tracking-tight mb-3 ${textColor}`}>
           {title}
         </h1>
