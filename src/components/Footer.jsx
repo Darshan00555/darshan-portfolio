@@ -4,7 +4,7 @@ import { Code2, Github, Linkedin, Mail, Twitter } from 'lucide-react';
 
 import { Footer } from './ui/AnimatedFooter';
 
-export default function PortfolioFooter() {
+export default function PortfolioFooter({ theme = 'light' }) {
   const socialLinks = [
     {
       icon: <Twitter className="h-full w-full" />,
@@ -46,6 +46,7 @@ export default function PortfolioFooter() {
       brandIcon={
         <Code2 className="h-8 w-8 text-white drop-shadow-lg sm:h-10 sm:w-10 md:h-14 md:w-14" />
       }
+      theme={theme}
     />
   );
 }

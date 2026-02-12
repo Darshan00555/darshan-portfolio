@@ -23,7 +23,7 @@ const Navbar = () => {
 
 const styles = {
   nav: {
-    display: 'flex',
+    display: 'sticky',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '1.5rem 4%',

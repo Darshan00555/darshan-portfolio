@@ -37,17 +37,19 @@
 
 html {
   scroll-behavior: smooth;
+  /* Performance optimizations */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-}
-
-body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
+  /* Performance optimizations */
+  text-rendering: optimizeSpeed;
 }
 
 a {
@@ -62,4 +64,22 @@ ul {
 section {
   padding: 4rem 2rem;
   min-height: 50vh;
+  /* Performance optimization */
+  contain: layout style;
+}
+
+/* Performance: Optimize animations globally */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

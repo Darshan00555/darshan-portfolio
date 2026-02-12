@@ -4,7 +4,7 @@ import { Briefcase, FileText, Home, User } from 'lucide-react';
 
 import { NavBar } from '@/components/ui/TubelightNavbar';
 
-export function NavBarDemo() {
+export function NavBarDemo({ theme, onThemeToggle }) {
   const navItems = [
     { name: 'Home', url: '#Home', icon: Home },
     { name: 'About', url: '#About', icon: User },
@@ -12,5 +12,5 @@ export function NavBarDemo() {
     { name: 'Resume', url: '#Resume', icon: FileText },
   ];
 
-  return <NavBar items={navItems} />;
+  return <NavBar items={navItems} theme={theme} onThemeToggle={onThemeToggle} />;
 }

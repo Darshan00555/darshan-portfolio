@@ -6,7 +6,7 @@ const Hero = () => {
     <section id="hero" className="hero-section">
       {/* Background Big Text */}
       <div className="bg-text-container">
-        <h1 className="bg-text">DARSHAN DEV</h1>
+        <h1 className="bg-text">DARSHAN SINGH</h1>
       </div>
 
       {/* Main Content Grid */}
@@ -26,7 +26,7 @@ const Hero = () => {
           <div className="image-wrapper">
             <img 
               src="https://placehold.co/400x600/e2e2e2/333?text=Darshan" 
-              alt="Darshan Dev" 
+              alt="Darshan Singh"
               className="person-image" 
             />
           </div>

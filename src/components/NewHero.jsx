@@ -1,11 +1,41 @@
 import React from 'react';
 
-import { ShaderBackground } from '@/components/ui/hero-shader';
-
 export default function NewHero() {
   return (
     <div className="w-full">
-      <ShaderBackground>
+      {/* Replaced heavy shader with lightweight CSS gradient for better performance */}
+      <div className="relative min-h-[650px] w-full overflow-hidden bg-gradient-to-br from-[#667eea] via-[#764ba2] to-[#f093fb]">
+        {/* SVG Filters for glass effects */}
+        <svg className="absolute inset-0 h-0 w-0">
+          <defs>
+            <filter id="glass-effect" x="-50%" y="-50%" width="200%" height="200%">
+              <feTurbulence baseFrequency="0.005" numOctaves="1" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.3" />
+              <feColorMatrix
+                type="matrix"
+                values="1 0 0 0 0.02
+                        0 1 0 0 0.02
+                        0 0 1 0 0.05
+                        0 0 0 0.9 0"
+                result="tint"
+              />
+            </filter>
+            <filter id="gooey-filter" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+              <feColorMatrix
+                in="blur"
+                mode="matrix"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9"
+                result="gooey"
+              />
+              <feComposite in="SourceGraphic" in2="gooey" operator="atop" />
+            </filter>
+          </defs>
+        </svg>
+
+        {/* Animated gradient overlay for subtle movement */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-purple-600/20 via-transparent to-pink-500/20 animate-pulse" style={{ animationDuration: '8s' }}></div>
+
         <header className="relative z-20 flex items-center justify-between p-6">
           {/* Logo */}
           <div className="flex items-center">
@@ -112,7 +142,7 @@ export default function NewHero() {
             </div>
           </div>
         </main>
-      </ShaderBackground>
+      </div>
     </div>
   );
 }

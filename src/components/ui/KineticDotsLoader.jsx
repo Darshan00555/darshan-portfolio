@@ -2,11 +2,12 @@ import React from 'react';
 
 import './KineticDotsLoader.css';
 
-export default function KineticDotsLoader() {
+export default function KineticDotsLoader({ theme = 'light' }) {
   const dots = 4; // Increased to 4 for better rhythm
+  const bgColor = theme === 'dark' ? 'bg-black' : 'bg-white';
 
   return (
-    <div className="fixed inset-0 z-[200] flex min-h-screen w-full items-center justify-center bg-black">
+    <div className={`fixed inset-0 z-[200] flex min-h-screen w-full items-center justify-center ${bgColor}`}>
       <div className="flex gap-5">
         {[...Array(dots)].map((_, i) => (
           <div key={i} className="relative flex h-20 w-6 flex-col items-center justify-end">
