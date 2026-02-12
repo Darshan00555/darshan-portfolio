@@ -1,10 +1,11 @@
+import NewHero from '../components/NewHero';
+
 import React from 'react';
-import { ArtificialHero } from '../components/ui/ArtificialHero';
 
 const Home = () => {
   return (
     <>
-      <ArtificialHero />
+      <NewHero />
     </>
   );
 };
