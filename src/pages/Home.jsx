@@ -1,16 +1,16 @@
-import React, { Suspense, lazy } from 'react';
+import '../components/ui/accordion-animations.css';
+import { LandingAccordionItem } from '../components/ui/interactive-image-accordion';
 
-// Lazy load 3D hero for better performance
-const Hero = lazy(() => import('../components/ui/void-hero').then(module => ({ default: module.Hero })));
+import React, { Suspense } from 'react';
 
 // Loading fallback
 const HeroFallback = () => (
-  <div className="h-svh w-screen bg-[#f5f5f5] flex items-center justify-center">
+  <div className="flex h-screen w-screen items-center justify-center bg-white">
     <div className="flex gap-3">
       {[...Array(3)].map((_, i) => (
         <div
           key={i}
-          className="w-3 h-3 bg-black rounded-full animate-bounce"
+          className="h-3 w-3 animate-bounce rounded-full bg-black"
           style={{ animationDelay: `${i * 0.15}s` }}
         />
       ))}
@@ -21,11 +21,7 @@ const HeroFallback = () => (
 const Home = ({ theme = 'light' }) => {
   return (
     <Suspense fallback={<HeroFallback />}>
-      <Hero 
-        title="Darshan Dev - Full Stack Developer"
-        description="Building modern web applications with cutting-edge technologies. Specialized in React, Node.js, and creating seamless user experiences that combine beautiful design with powerful functionality."
-        theme={theme}
-      />
+      <LandingAccordionItem theme={theme} />
     </Suspense>
   );
 };
