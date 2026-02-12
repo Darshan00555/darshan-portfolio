@@ -2,6 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 
+// eslint-disable-next-line no-unused-vars
+import { motion } from 'framer-motion';
+
 import { cn } from '@/lib/utils';
 
 function createBeam(width, height) {
