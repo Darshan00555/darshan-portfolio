@@ -22,8 +22,8 @@ function useDeviceCapabilities() {
     const cores = navigator.hardwareConcurrency || 2;
     const isLowEnd = cores <= 6 || isMobile; // Increased threshold
     
-    // Only enable 3D on powerful desktop devices
-    const shouldRender3D = !isMobile && cores > 6;
+    // Enable 3D on all devices - use quality settings for performance optimization
+    const shouldRender3D = true;
     
     setCapabilities({
       isMobile,
@@ -202,7 +202,7 @@ function FallbackHero({ title, description, theme }) {
 }
 
 export const Hero = ({ title, description, theme = 'light' }) => {
-  const { isMobile, shouldRender3D } = useDeviceCapabilities();
+  const { isMobile, isLowEnd, shouldRender3D } = useDeviceCapabilities();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -215,7 +215,7 @@ export const Hero = ({ title, description, theme = 'light' }) => {
     return <FallbackHero title={title} description={description} theme={theme} />;
   }
 
-  const quality = 'medium'; // Always use medium for better performance
+  const quality = isMobile || isLowEnd ? 'low' : 'medium';
 
   const bgColor = theme === 'dark' ? 'bg-[#0A0A0A]' : 'bg-[#f5f5f5]';
   const textColor = theme === 'dark' ? 'text-white' : 'text-black';
