@@ -123,7 +123,7 @@ export default function ElegantCarousel() {
 
   return (
     <div
-      className="carousel-wrapper relative h-[600px] w-full overflow-hidden rounded-3xl bg-zinc-900 text-white shadow-2xl"
+      className="carousel-wrapper relative h-auto min-h-[600px] w-full overflow-hidden rounded-3xl bg-zinc-900 text-white shadow-2xl"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
@@ -138,7 +138,7 @@ export default function ElegantCarousel() {
         }}
       />
 
-      <div className="carousel-inner flex h-full items-center justify-between px-8 md:px-16">
+      <div className="carousel-inner flex h-full flex-col-reverse items-center justify-between gap-8 px-4 py-12 md:flex-row md:gap-0 md:px-16 md:py-0">
         {/* Left: Text Content */}
         <div className="carousel-content relative z-10 w-full max-w-lg md:w-1/2">
           <div className="carousel-content-inner space-y-6">
@@ -199,14 +199,14 @@ export default function ElegantCarousel() {
         </div>
 
         {/* Right: Image */}
-        <div className="carousel-image-container relative hidden h-[450px] w-[350px] md:block lg:w-[450px]">
+        <div className="carousel-image-container relative block h-[300px] w-full md:h-[450px] md:w-[350px] lg:w-[450px]">
           <div
-            className={`carousel-image-frame relative h-full w-full overflow-hidden rounded-2xl shadow-2xl transition-all duration-700 ease-out ${isTransitioning ? 'translate-x-8 scale-95 opacity-0' : 'translate-x-0 scale-100 opacity-100'}`}
+            className={`carousel-image-frame relative h-full w-full overflow-hidden rounded-2xl bg-black/40 shadow-2xl transition-all duration-700 ease-out ${isTransitioning ? 'translate-x-8 scale-95 opacity-0' : 'translate-x-0 scale-100 opacity-100'}`}
           >
             <img
               src={currentSlide.imageUrl}
               alt={currentSlide.title}
-              className="carousel-image h-full w-full object-cover transition-transform duration-[6000ms] ease-linear hover:scale-110"
+              className="carousel-image h-full w-full object-contain object-center transition-transform duration-[6000ms] ease-linear hover:scale-105"
               style={{ transform: isPaused ? 'scale(1.05)' : 'scale(1.0)' }}
             />
             <div

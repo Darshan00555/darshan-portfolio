@@ -1,3 +1,5 @@
+import ElegantCarousel from '../components/ui/elegant-carousel';
+import FeaturesSection from '../components/ui/features-section';
 import HeroSection from '../components/ui/glassmorphism-trust-hero';
 
 import React, { Suspense } from 'react';
@@ -21,6 +23,12 @@ const Home = () => {
   return (
     <Suspense fallback={<HeroFallback />}>
       <HeroSection />
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 py-20">
+        <ElegantCarousel />
+      </div>
+      <div className="relative z-10 w-full py-20">
+        <FeaturesSection />
+      </div>
     </Suspense>
   );
 };
