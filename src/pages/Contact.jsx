@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
+
+import React, { useRef, useState } from 'react';
 
 // eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion';
-import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Loader2, Mail, MapPin, Phone, Send } from 'lucide-react';
 
 export default function Contact() {
+  const formRef = useRef();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,9 +21,30 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Demo submission logic
-    alert('Message sent! (Demo)');
-    setFormData({ name: '', email: '', message: '' });
+    setLoading(true);
+
+    // EmailJS service configuration
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    emailjs
+      .sendForm(serviceId, templateId, formRef.current, {
+        publicKey: publicKey,
+      })
+      .then(
+        () => {
+          alert('Message sent successfully!');
+          setFormData({ name: '', email: '', message: '' });
+        },
+        (error) => {
+          console.error('FAILED...', error.text);
+          alert('Failed to send message. Please try again later.');
+        }
+      )
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -89,7 +114,7 @@ export default function Contact() {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="w-full rounded-3xl border border-white/5 bg-zinc-900/40 p-8 shadow-2xl backdrop-blur-md md:w-1/2 md:p-10"
       >
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="mb-2 block text-sm font-medium text-zinc-400">Your Name</label>
             <input
@@ -131,10 +156,20 @@ export default function Contact() {
 
           <button
             type="submit"
-            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white py-4 font-bold text-black transition-colors hover:bg-zinc-200"
+            disabled={loading}
+            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white py-4 font-bold text-black transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Send Message
-            <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            {loading ? (
+              <>
+                Sending...
+                <Loader2 className="h-4 w-4 animate-spin" />
+              </>
+            ) : (
+              <>
+                Send Message
+                <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </>
+            )}
           </button>
         </form>
       </motion.div>
