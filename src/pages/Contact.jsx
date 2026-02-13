@@ -24,9 +24,22 @@ export default function Contact() {
     setLoading(true);
 
     // EmailJS service configuration
-    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+    const serviceId = 'service_05uiodo';
+    const templateId = 'template_kja9lhs';
+    const publicKey = 'OtLeN4-GXrnnCCoNU';
+
+    if (!serviceId || !templateId || !publicKey) {
+      console.error('EmailJS Environment Variables are missing:', {
+        serviceId,
+        templateId,
+        publicKey,
+      });
+      alert(
+        'Failed to send message: Missing configuration. Please check your environment variables.'
+      );
+      setLoading(false);
+      return;
+    }
 
     emailjs
       .sendForm(serviceId, templateId, formRef.current, {
@@ -38,8 +51,8 @@ export default function Contact() {
           setFormData({ name: '', email: '', message: '' });
         },
         (error) => {
-          console.error('FAILED...', error.text);
-          alert('Failed to send message. Please try again later.');
+          console.error('FAILED...', error);
+          alert(`Failed to send message: ${error.text || 'Please try again later.'}`);
         }
       )
       .finally(() => {
