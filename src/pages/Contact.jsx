@@ -85,10 +85,10 @@ export default function Contact() {
             <div>
               <h3 className="mb-1 font-medium text-white">Email Me</h3>
               <a
-                href="mailto:contact@darshansingh.dev"
+                href="mailto:darshan.wkhra1@gmail.com"
                 className="text-zinc-400 transition-colors hover:text-white"
               >
-                contact@darshansingh.dev
+                darshan.wkhra1@gmail.com
               </a>
             </div>
           </div>
@@ -100,10 +100,10 @@ export default function Contact() {
             <div>
               <h3 className="mb-1 font-medium text-white">Call Me</h3>
               <a
-                href="tel:+919876543210"
+                href="tel:+919773817031"
                 className="text-zinc-400 transition-colors hover:text-white"
               >
-                +91 98765 43210
+                +91 9773817031
               </a>
             </div>
           </div>
