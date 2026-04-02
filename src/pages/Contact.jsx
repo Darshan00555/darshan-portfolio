@@ -1,191 +1,285 @@
+import Reveal from '../components/Reveal';
+import SectionHeader from '../components/SectionHeader';
+import { contactCards, serviceCards, siteConfig } from '../data/siteContent';
+import { usePageMetadata } from '../lib/seo';
 import emailjs from '@emailjs/browser';
 
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
-// eslint-disable-next-line no-unused-vars
-import { motion } from 'framer-motion';
-import { Loader2, Mail, MapPin, Phone, Send } from 'lucide-react';
+import {
+  ArrowRight,
+  Briefcase,
+  Clock3,
+  Mail,
+  MapPin,
+  Phone,
+  SearchCheck,
+  Sparkles,
+} from 'lucide-react';
+
+const initialFormData = {
+  name: '',
+  email: '',
+  service: '',
+  website: '',
+  message: '',
+};
+
+const serviceHighlights = [
+  {
+    icon: Briefcase,
+    title: 'Frontend builds',
+    description: 'React interfaces, landing pages, and responsive portfolio or service redesigns.',
+  },
+  {
+    icon: SearchCheck,
+    title: 'SEO fixes',
+    description:
+      'On-page SEO, technical SEO, metadata, content structuring, and crawl improvements.',
+  },
+  {
+    icon: Clock3,
+    title: 'Performance',
+    description:
+      'Lighthouse, PageSpeed, and Core Web Vitals improvements tied to real implementation.',
+  },
+];
 
 export default function Contact() {
-  const formRef = useRef();
+  const formRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+  const [formData, setFormData] = useState(initialFormData);
+
+  usePageMetadata({
+    title: 'Contact | Start a Frontend or SEO Project',
+    description:
+      'Contact Darshan Singh for React frontend work, WordPress and Shopify development, SEO audits, technical SEO fixes, and website performance optimization.',
+    path: '/contact',
+    keywords: [
+      'contact frontend developer',
+      'contact SEO specialist',
+      'React project inquiry',
+      'WordPress and Shopify project inquiry',
+      'technical SEO contact',
+    ],
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      name: 'Contact Darshan Singh',
+      url: `${siteConfig.baseUrl}/contact`,
+      description:
+        'Project inquiry page for frontend development, WordPress, Shopify, and SEO optimization work.',
+    },
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({
+      ...current,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     setLoading(true);
 
-    // EmailJS service configuration
-    const serviceId = 'service_05uiodo';
-    const templateId = 'template_kja9lhs';
-    const publicKey = 'OtLeN4-GXrnnCCoNU';
-
-    if (!serviceId || !templateId || !publicKey) {
-      console.error('EmailJS Environment Variables are missing:', {
-        serviceId,
-        templateId,
-        publicKey,
+    try {
+      await emailjs.sendForm('service_05uiodo', 'template_kja9lhs', formRef.current, {
+        publicKey: 'OtLeN4-GXrnnCCoNU',
       });
-      alert(
-        'Failed to send message: Missing configuration. Please check your environment variables.'
-      );
+
+      setFormData(initialFormData);
+      window.alert('Message sent successfully.');
+    } catch (error) {
+      console.error(error);
+      window.alert('Unable to send the message right now. Please try again later.');
+    } finally {
       setLoading(false);
-      return;
     }
-
-    emailjs
-      .sendForm(serviceId, templateId, formRef.current, {
-        publicKey: publicKey,
-      })
-      .then(
-        () => {
-          alert('Message sent successfully!');
-          setFormData({ name: '', email: '', message: '' });
-        },
-        (error) => {
-          console.error('FAILED...', error);
-          alert(`Failed to send message: ${error.text || 'Please try again later.'}`);
-        }
-      )
-      .finally(() => {
-        setLoading(false);
-      });
   };
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-7xl flex-col items-start gap-16 px-6 pt-24 pb-20 md:flex-row">
-      {/* Contact Info */}
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full md:w-1/2"
-      >
-        <h1 className="font-display mb-6 bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-4xl font-bold text-transparent md:text-6xl">
-          Let's Talk
-        </h1>
-        <p className="mb-12 max-w-lg text-lg leading-relaxed text-zinc-400">
-          I'm currently available for freelance projects and full-time opportunities. If you have a
-          project that needs some creative touch, I'd love to hear about it.
-        </p>
+    <div className="mx-auto max-w-7xl px-3 pt-2 pb-20 sm:px-4 sm:pt-3 lg:px-6 lg:pt-4">
+      <div className="grid gap-6 xl:grid-cols-[0.88fr_1.12fr]">
+        <div className="space-y-6">
+          <Reveal>
+            <div className="page-hero rounded-[1.75rem] p-4 sm:p-5 lg:p-6">
+              <p className="eyebrow mb-5">Contact</p>
+              <h1 className="max-w-3xl text-4xl font-semibold tracking-tight text-balance text-[var(--color-ink)] sm:text-[3rem] lg:text-[3.1rem] lg:leading-[1.05]">
+                Start a project for frontend development, SEO optimization, or a full redesign.
+              </h1>
+              <p className="mt-4 text-base leading-7 text-[var(--color-muted)] sm:text-lg">
+                The inquiry flow is now designed to match the sharper positioning of the website and
+                make the service options obvious from the first screen.
+              </p>
+            </div>
+          </Reveal>
 
-        <div className="space-y-8">
-          <div className="group flex items-center gap-6">
-            <div className="rounded-2xl border border-white/10 bg-zinc-900 p-4 transition-colors group-hover:border-white/20">
-              <Mail className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h3 className="mb-1 font-medium text-white">Email Me</h3>
-              <a
-                href="mailto:darshan.wkhra1@gmail.com"
-                className="text-zinc-400 transition-colors hover:text-white"
-              >
-                darshan.wkhra1@gmail.com
-              </a>
-            </div>
+          <div className="grid gap-4 sm:grid-cols-3 xl:grid-cols-1">
+            {contactCards.map((card, index) => (
+              <Reveal key={card.title} delay={0.05 * index}>
+                <article className="surface-card interactive-card rounded-[1.8rem] p-5">
+                  <span className="icon-badge">
+                    {index === 0 ? (
+                      <Mail className="h-5 w-5" />
+                    ) : index === 1 ? (
+                      <Phone className="h-5 w-5" />
+                    ) : (
+                      <MapPin className="h-5 w-5" />
+                    )}
+                  </span>
+                  <p className="mt-4 text-sm font-semibold text-[var(--color-ink)]">{card.title}</p>
+                  {card.href ? (
+                    <a
+                      href={card.href}
+                      className="mt-2 block text-sm leading-6 text-[var(--color-muted)] transition hover:text-[var(--color-accent)]"
+                    >
+                      {card.detail}
+                    </a>
+                  ) : (
+                    <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
+                      {card.detail}
+                    </p>
+                  )}
+                </article>
+              </Reveal>
+            ))}
           </div>
 
-          <div className="group flex items-center gap-6">
-            <div className="rounded-2xl border border-white/10 bg-zinc-900 p-4 transition-colors group-hover:border-white/20">
-              <Phone className="h-6 w-6 text-white" />
+          <Reveal delay={0.12}>
+            <div className="dark-panel rounded-[1.9rem] p-5 sm:p-6">
+              <div className="flex items-center gap-3">
+                <span className="icon-badge-dark">
+                  <Sparkles className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold tracking-[0.2em] text-white/[0.62] uppercase">
+                    Service scope
+                  </p>
+                  <p className="text-lg font-semibold text-white">What you can ask for here</p>
+                </div>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {serviceCards
+                  .flatMap((service) => service.items)
+                  .map((item) => (
+                    <span
+                      key={item}
+                      className="chip border-white/10 bg-white/10 text-white/[0.82] shadow-none"
+                    >
+                      {item}
+                    </span>
+                  ))}
+              </div>
             </div>
-            <div>
-              <h3 className="mb-1 font-medium text-white">Call Me</h3>
-              <a
-                href="tel:+919773817031"
-                className="text-zinc-400 transition-colors hover:text-white"
-              >
-                +91 9773817031
-              </a>
-            </div>
-          </div>
-
-          <div className="group flex items-center gap-6">
-            <div className="rounded-2xl border border-white/10 bg-zinc-900 p-4 transition-colors group-hover:border-white/20">
-              <MapPin className="h-6 w-6 text-white" />
-            </div>
-            <div>
-              <h3 className="mb-1 font-medium text-white">Location</h3>
-              <p className="text-zinc-400">Bangalore, India</p>
-            </div>
-          </div>
+          </Reveal>
         </div>
-      </motion.div>
 
-      {/* Contact Form */}
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="w-full rounded-3xl border border-white/5 bg-zinc-900/40 p-8 shadow-2xl backdrop-blur-md md:w-1/2 md:p-10"
-      >
-        <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-zinc-400">Your Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="John Doe"
-              className="w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-white placeholder-zinc-600 transition-all focus:border-white/30 focus:ring-1 focus:ring-white/30 focus:outline-none"
-              required
-            />
+        <Reveal delay={0.08}>
+          <div className="surface-card rounded-[2rem] p-5 sm:p-6 lg:p-7">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {serviceHighlights.map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <div key={item.title} className="page-meta-card rounded-[1.4rem] p-4">
+                    <span className="icon-badge h-11 w-11">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <p className="mt-4 text-sm font-semibold text-[var(--color-ink)]">
+                      {item.title}
+                    </p>
+                    <p className="mt-2 text-sm leading-6 text-[var(--color-muted)]">
+                      {item.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+
+            <form ref={formRef} onSubmit={handleSubmit} className="mt-8 grid gap-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="grid gap-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">Name</span>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="field-input"
+                    placeholder="Your name"
+                  />
+                </label>
+                <label className="grid gap-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">Email</span>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="field-input"
+                    placeholder="you@example.com"
+                  />
+                </label>
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <label className="grid gap-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">Service</span>
+                  <select
+                    name="service"
+                    value={formData.service}
+                    onChange={handleChange}
+                    className="field-input"
+                  >
+                    <option value="">Select service type</option>
+                    <option value="react_frontend">React frontend development</option>
+                    <option value="wordpress_shopify">WordPress / Shopify development</option>
+                    <option value="seo_optimization">SEO & optimization</option>
+                    <option value="full_redesign">Full website redesign</option>
+                  </select>
+                </label>
+                <label className="grid gap-2">
+                  <span className="text-sm font-medium text-[var(--color-ink)]">Website</span>
+                  <input
+                    type="text"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
+                    className="field-input"
+                    placeholder="Current website or brand name"
+                  />
+                </label>
+              </div>
+
+              <label className="grid gap-2">
+                <span className="text-sm font-medium text-[var(--color-ink)]">Project details</span>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  rows="7"
+                  className="textarea-input"
+                  placeholder="Tell me about the redesign, frontend scope, SEO goals, or project timeline."
+                />
+              </label>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {loading ? 'Sending...' : 'Send project inquiry'}
+                {!loading ? <ArrowRight className="h-4 w-4" /> : null}
+              </button>
+            </form>
           </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-zinc-400">Your Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="john@example.com"
-              className="w-full rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-white placeholder-zinc-600 transition-all focus:border-white/30 focus:ring-1 focus:ring-white/30 focus:outline-none"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-zinc-400">Message</label>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Tell me about your project..."
-              rows="4"
-              className="w-full resize-none rounded-xl border border-white/10 bg-black/50 px-4 py-3 text-white placeholder-zinc-600 transition-all focus:border-white/30 focus:ring-1 focus:ring-white/30 focus:outline-none"
-              required
-            ></textarea>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white py-4 font-bold text-black transition-colors hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading ? (
-              <>
-                Sending...
-                <Loader2 className="h-4 w-4 animate-spin" />
-              </>
-            ) : (
-              <>
-                Send Message
-                <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </>
-            )}
-          </button>
-        </form>
-      </motion.div>
+        </Reveal>
+      </div>
     </div>
   );
 }

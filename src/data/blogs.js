@@ -1,3 +1,5 @@
+import seoBlogs from './seoBlogs.js';
+
 const blogs = [
   {
     title: 'How I Built My First MERN Stack App: Lessons From the Trenches',
@@ -1102,6 +1104,7 @@ The technical skills get you in the door. The business skills keep you there.
 
 *If you're a business looking for a developer who thinks this way — [let's work together](/#contact).*`,
   },
+  ...seoBlogs,
 ];
 
 export default blogs;

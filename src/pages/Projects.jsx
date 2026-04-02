@@ -1,129 +1,191 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import Reveal from '../components/Reveal';
+import SectionHeader from '../components/SectionHeader';
+import { frontendProjects, seoProjects, siteConfig } from '../data/siteContent';
+import { usePageMetadata } from '../lib/seo';
 
-// eslint-disable-next-line no-unused-vars
-import { motion } from 'framer-motion';
-import { ExternalLink, Github } from 'lucide-react';
+import { ArrowUpRight, Gauge, LayoutPanelTop, MonitorSmartphone, SearchCheck } from 'lucide-react';
 
-const projects = [
+const summaryCards = [
   {
-    title: 'E-Commerce Dashboard',
-    description:
-      'A comprehensive dashboard for managing online stores, featuring real-time analytics, inventory management, and order processing capabilities.',
-    tags: ['React', 'Node.js', 'MongoDB', 'Tailwind CSS'],
-    image:
-      'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '#',
-    github: '#',
+    icon: LayoutPanelTop,
+    value: '10+',
+    label: 'Frontend projects',
+    detail:
+      'The page highlights selected frontend work from a broader React and website-delivery portfolio.',
   },
   {
-    title: 'AI Image Generator',
-    description:
-      'An innovative tool that uses machine learning to generate unique artwork based on text descriptions, offering various styles and customization options.',
-    tags: ['Python', 'TensorFlow', 'React', 'FastAPI'],
-    image:
-      'https://images.unsplash.com/photo-1547954575-855750c57bd3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '#',
-    github: '#',
+    icon: SearchCheck,
+    value: '8+',
+    label: 'SEO projects',
+    detail:
+      'The page highlights selected SEO case studies from broader technical and on-page optimization work.',
   },
   {
-    title: 'Social Media App',
-    description:
-      'A feature-rich social platform enabling users to connect, share content, and interact through real-time messaging and feed updates.',
-    tags: ['React Native', 'Firebase', 'Redux', 'TypeScript'],
-    image:
-      'https://images.unsplash.com/photo-1611162617474-5b21e879e113?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '#',
-    github: '#',
-  },
-  {
-    title: 'Health & Fitness Tracker',
-    description:
-      'A mobile-first application for tracking workouts, nutrition, and health metrics with personalized recommendations and progress visualization.',
-    tags: ['Flutter', 'Dart', 'Google Fit API', 'Node.js'],
-    image:
-      'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    link: '#',
-    github: '#',
+    icon: MonitorSmartphone,
+    value: 'A to Z',
+    label: 'Responsive coverage',
+    detail: 'Layouts are shaped for phone, tablet, laptop, and large screens from the beginning.',
   },
 ];
 
-const ProjectCard = ({ project, index }) => {
+function ProjectGrid({ eyebrow, title, description, projects }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/50 transition-colors hover:border-white/10"
-    >
-      <div className="aspect-video overflow-hidden">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 flex items-center justify-center gap-4 bg-black/60 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
-          <a
-            href={project.link}
-            className="transform rounded-full bg-white p-3 text-black transition-colors hover:scale-110 hover:bg-zinc-200"
-          >
-            <ExternalLink className="h-5 w-5" />
-          </a>
-          <a
-            href={project.github}
-            className="transform rounded-full border border-white/20 bg-zinc-900 p-3 text-white transition-colors hover:scale-110 hover:bg-zinc-800"
-          >
-            <Github className="h-5 w-5" />
-          </a>
-        </div>
-      </div>
+    <section className="section-space">
+      <Reveal>
+        <SectionHeader eyebrow={eyebrow} title={title} description={description} />
+      </Reveal>
+      <div className="mt-8 grid gap-5 xl:grid-cols-3">
+        {projects.map((project, index) => {
+          const isSeo = project.kind === 'SEO optimization';
+          const Icon = isSeo ? SearchCheck : LayoutPanelTop;
 
-      <div className="p-6">
-        <h3 className="mb-2 text-xl font-bold text-white">{project.title}</h3>
-        <p className="mb-4 text-sm leading-relaxed text-zinc-400">{project.description}</p>
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-zinc-300"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+          return (
+            <Reveal key={`${eyebrow}-${project.title}`} delay={0.05 * index}>
+              <article className="surface-card interactive-card rounded-[1.9rem] p-5 sm:p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <span className="icon-badge">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="text-xs font-semibold tracking-[0.22em] text-[var(--color-accent)] uppercase">
+                        {project.kind}
+                      </p>
+                      <h3 className="mt-2 text-2xl font-semibold text-[var(--color-ink)]">
+                        {project.title}
+                      </h3>
+                    </div>
+                  </div>
+                  <span className="chip">{project.year}</span>
+                </div>
+
+                <p className="mt-4 text-sm leading-7 text-[var(--color-muted)]">
+                  {project.summary}
+                </p>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {project.stack.map((item) => (
+                    <span key={item} className="chip">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+
+                <ul className="mt-6 space-y-3">
+                  {project.outcomes.map((outcome) => (
+                    <li
+                      key={outcome}
+                      className="flex gap-3 text-sm leading-6 text-[var(--color-muted)]"
+                    >
+                      <span className="mt-2 h-2 w-2 rounded-full bg-[var(--color-accent)]" />
+                      <span>{outcome}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={project.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-accent)] transition hover:text-[var(--color-ink)]"
+                >
+                  Visit live project
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
+              </article>
+            </Reveal>
+          );
+        })}
       </div>
-    </motion.div>
+    </section>
   );
-};
+}
 
 export default function Projects() {
+  usePageMetadata({
+    title: 'Projects | React Frontend Projects and SEO Optimization Case Studies',
+    description:
+      'Browse Darshan Singh’s featured React frontend websites and SEO optimization case studies, selected from a broader portfolio of 10+ frontend projects and 8+ SEO projects.',
+    path: '/projects',
+    keywords: [
+      'React frontend projects',
+      'SEO optimization projects',
+      'frontend developer case studies',
+      'technical SEO portfolio',
+      'WordPress and Shopify developer projects',
+    ],
+    schema: {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Projects',
+      url: `${siteConfig.baseUrl}/projects`,
+      description:
+        'A collection of frontend development work and SEO optimization case studies by Darshan Singh.',
+    },
+  });
+
   return (
-    <div className="mx-auto min-h-screen max-w-7xl px-6 pt-24 pb-20">
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-16">
-        <h1 className="font-display mb-6 bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-4xl font-bold text-transparent md:text-6xl">
-          Featured Projects
-        </h1>
-        <p className="max-w-2xl text-lg text-zinc-400">
-          A collection of projects exploring modern web technologies, design patterns, and creative
-          problem solving.
-        </p>
-      </motion.div>
+    <div className="mx-auto max-w-7xl px-3 pt-2 pb-20 sm:px-4 sm:pt-3 lg:px-6 lg:pt-4">
+      <Reveal>
+        <div className="page-hero rounded-[1.75rem] p-4 sm:p-5 lg:p-6">
+          <div className="grid gap-6 xl:grid-cols-[1.04fr_0.96fr] xl:items-center">
+            <div>
+              <p className="eyebrow mb-5">Projects</p>
+              <h1 className="max-w-4xl text-4xl font-semibold tracking-tight text-balance text-[var(--color-ink)] sm:text-[3rem] lg:text-[3.2rem] lg:leading-[1.05]">
+                Frontend builds and SEO case studies now look like a real portfolio, not a plain
+                list.
+              </h1>
+              <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--color-muted)] sm:text-lg">
+                Your original projects are still the foundation, but the page now separates the work
+                into cleaner tracks with stronger hierarchy, richer cards, and a better visual flow
+                for recruiters and clients.
+              </p>
+            </div>
 
-      <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2">
-        {projects.map((project, index) => (
-          <ProjectCard key={index} project={project} index={index} />
-        ))}
-      </div>
+            <div className="dark-panel rounded-[1.9rem] p-5 sm:p-6">
+              <div className="flex items-center gap-3">
+                <span className="icon-badge-dark">
+                  <Gauge className="h-5 w-5" />
+                </span>
+                <div>
+                  <p className="text-sm font-semibold tracking-[0.2em] text-white/[0.62] uppercase">
+                    Portfolio direction
+                  </p>
+                  <p className="text-lg font-semibold text-white">Clear tracks, clearer outcomes</p>
+                </div>
+              </div>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+                {summaryCards.map((card) => {
+                  const Icon = card.icon;
 
-      <div className="flex justify-center">
-        <Link
-          to="/contact"
-          className="rounded-full bg-white px-8 py-4 font-bold text-black transition-colors hover:bg-zinc-200"
-        >
-          Start a Project Together
-        </Link>
-      </div>
+                  return (
+                    <div key={card.label} className="dark-tile rounded-[1.35rem] p-4">
+                      <Icon className="h-5 w-5 text-white" />
+                      <p className="mt-4 text-2xl font-semibold text-white">{card.value}</p>
+                      <p className="mt-2 text-sm font-semibold text-white">{card.label}</p>
+                      <p className="mt-2 text-sm leading-6 text-white/[0.7]">{card.detail}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+
+      <ProjectGrid
+        eyebrow="Frontend Track"
+        title="React and frontend delivery"
+        description="These are selected featured websites from a broader track of 10+ frontend projects."
+        projects={frontendProjects}
+      />
+
+      <ProjectGrid
+        eyebrow="SEO Track"
+        title="SEO & optimization case studies"
+        description="These are selected featured case studies from 8+ SEO and optimization projects."
+        projects={seoProjects}
+      />
     </div>
   );
 }

@@ -1,8 +1,6 @@
-import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import PortfolioFooter from './components/Footer';
-// Removed BrowserRouter import
+import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import About from './pages/About';
 import Blog from './pages/Blog';
@@ -12,25 +10,24 @@ import Home from './pages/Home';
 import Projects from './pages/Projects';
 import Resume from './pages/Resume';
 
-// Lazy loaded components for better performance
-// const Timeline = lazy(() => import('./components/Timeline'));
-
 function App() {
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-950 font-sans text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen bg-[var(--color-bg)] text-[var(--color-ink)]">
+      <div className="page-gradient" aria-hidden="true" />
+      <div className="page-grid" aria-hidden="true" />
       <Navbar />
-      <div className="flex-grow">
+      <main className="relative z-10">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/resume" element={<Resume />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/projects" element={<Projects />} />
           <Route path="/about" element={<About />} />
+          <Route path="/resume" element={<Resume />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
-      </div>
-      <PortfolioFooter />
+      </main>
+      <Footer />
     </div>
   );
 }
